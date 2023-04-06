@@ -1,3 +1,5 @@
+#! /bin/node
+
 const express = require("express");
 const { Server } = require("socket.io");
 const { createServer } = require("http");

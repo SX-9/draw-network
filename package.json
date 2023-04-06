@@ -2,5 +2,25 @@
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.6.1"
-  }
+  },
+  "name": "draw-network",
+  "description": "Multiplayer Drawing Board",
+  "version": "1.0.0",
+  "bin": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SX-9/draw-network.git"
+  },
+  "keywords": [
+    "draw"
+  ],
+  "author": "sx9dev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SX-9/draw-network/issues"
+  },
+  "homepage": "https://github.com/SX-9/draw-network#readme"
 }
