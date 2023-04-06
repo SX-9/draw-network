@@ -62,9 +62,14 @@
       let isDrag = 0;
       document.onmousedown = () => isDrag++;
       document.onmouseup = () => isDrag--;
+      document.ontouchstart = () => isDrag++;
+      document.ontouchend = () => isDrag--;
 
       socket.on("draw", draw);
-      canvas.onmousemove = (e) => {
+      canvas.addEventListener("mousemove", drag, false);
+      canvas.addEventListener("touchmove", drag, false);
+
+      function drag(e) {
         if (!isDrag) return;
         let cords = pos(canvas, e);
 
