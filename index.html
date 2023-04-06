@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        color-scheme: dark;
+        font-family: monospace;
+        margin: 0;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      canvas {
+        margin-top: 1em;
+        border-radius: 1em;
+        border: 0.2em dotted grey;
+        background-color: white;
+        touch-action: none;
+      }
+    </style>
+    <title>Draw Network</title>
+  </head>
+  <body>
+    <h1>Draw Network</h1>
+    <p>Your Color: <span id="color">Loading...</span></p>
+    <canvas width="500" height="500"></canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const colors = [
+        "white",
+        "pink",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "lime",
+        "cyan",
+        "blue",
+        "purple",
+        "magenta",
+        "black",
+      ];
+
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+      const socket = io("/");
+
+      document.querySelector("#color").innerText = color;
+      document.querySelector("#color").style.color = color;
+
+      let isDrag = 0;
+      document.onmousedown = () => isDrag++;
+      document.onmouseup = () => isDrag--;
+
+      socket.on("draw", draw);
+      canvas.onmousemove = (e) => {
+        if (!isDrag) return;
+        let cords = pos(canvas, e);
+
+        socket.emit("draw", { cords, color });
+        draw({ cords, color });
+      };
+
+      function pos(el, evt) {
+        let rect = el.getBoundingClientRect();
+
+        return {
+          x: Math.round(evt.clientX - rect.left),
+          y: Math.round(evt.clientY - rect.top),
+        };
+      }
+
+      function draw(e) {
+        let { color: col, cords } = e;
+
+        ctx.fillStyle = col;
+        ctx.fillRect(cords.x, cords.y, 5, 5);
+      }
+    </script>
+  </body>
+</html>
