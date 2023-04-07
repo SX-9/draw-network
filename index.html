@@ -26,6 +26,13 @@
         border: 0.2em dotted grey;
         background-color: white;
         touch-action: none;
+        cursor: crosshair;
+      }
+      
+      @media (max-width: 500px) {
+        canvas {
+          width: 100%;
+        }
       }
     </style>
     <title>Draw Network</title>
@@ -37,8 +44,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const colors = [
-        "white",
         "pink",
+        "magenta",
         "red",
         "orange",
         "yellow",
@@ -47,7 +54,6 @@
         "cyan",
         "blue",
         "purple",
-        "magenta",
         "black",
       ];
 
@@ -57,7 +63,7 @@
       const socket = io("/");
 
       document.querySelector("#color").innerText = color;
-      document.querySelector("#color").style.color = color;
+      document.querySelector("#color").style.backgroundColor = color;
 
       let isDrag = 0;
       document.onmousedown = () => isDrag++;
