@@ -66,16 +66,30 @@
       document.ontouchend = () => isDrag--;
 
       socket.on("draw", draw);
-      canvas.addEventListener("mousemove", drag, false);
-      canvas.addEventListener("touchmove", drag, false);
+      canvas.addEventListener(
+        "mousemove",
+        (e) => {
+          if (!isDrag) return;
+          let cords = pos(canvas, e);
 
-      function drag(e) {
-        if (!isDrag) return;
-        let cords = pos(canvas, e);
+          socket.emit("draw", { cords, color });
+          draw({ cords, color });
+        },
+        false
+      );
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!isDrag) return;
+          Array.from(e.touches).forEach((t) => {
+            let cords = pos(canvas, t);
 
-        socket.emit("draw", { cords, color });
-        draw({ cords, color });
-      };
+            socket.emit("draw", { cords, color });
+            draw({ cords, color });
+          });
+        },
+        false
+      );
 
       function pos(el, evt) {
         let rect = el.getBoundingClientRect();
