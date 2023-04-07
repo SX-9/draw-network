@@ -23,6 +23,11 @@
         align-items: center;
       }
 
+      span {
+        border: .1em solid white;
+        border-radius: .4em;
+      }
+
       canvas {
         margin-top: 1em;
         border-radius: 1em;
@@ -65,8 +70,9 @@
       const ctx = canvas.getContext("2d");
       const socket = io("/");
 
-      document.querySelector("#color").innerText = color;
+      document.querySelector("#color").innerText = '###';
       document.querySelector("#color").style.backgroundColor = color;
+      document.querySelector("#color").style.color = color;
 
       let isDrag = 0;
       document.onmousedown = () => isDrag++;
