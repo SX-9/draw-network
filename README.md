@@ -1,4 +1,4 @@
 # Draw Network
-```bash
-PORT=3000 npx draw-network
-```
+Multiplayer Drawing Board
+
+[Live Site](https://draw-net.up.railway.app)
