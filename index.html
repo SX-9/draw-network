@@ -63,8 +63,9 @@
       const ctx = canvas.getContext("2d");
       const socket = io("/");
 
-      document.querySelector("#color").innerText = color;
+      document.querySelector("#color").innerText = '###';
       document.querySelector("#color").style.backgroundColor = color;
+      document.querySelector("#color").style.color = color;
 
       let isDrag = 0;
       document.onmousedown = () => isDrag++;
