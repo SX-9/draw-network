@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Multiplayer Drawing Board">
+    <meta name="description" content="Multiplayer Drawing Board" />
     <style>
       * {
         color-scheme: dark;
@@ -21,20 +21,34 @@
         align-items: center;
       }
 
-      span {
-        border: .1em solid white;
-        border-radius: .4em;
-      }
-
       canvas {
-        margin-top: 1em;
         border-radius: 1em;
         border: 0.2em dotted grey;
         background-color: white;
         touch-action: none;
         cursor: crosshair;
       }
-      
+
+      div {
+        margin-top: 0.3em;
+        margin-bottom: 0.5em;
+        display: flex;
+        gap: 1em;
+        width: 100%;
+        justify-content: center;
+      }
+
+      div > * {
+        all: unset;
+        margin: 0.1em;
+        padding: 0.3em;
+        background: white;
+        color: black;
+        border-radius: 1em;
+        text-align: center;
+        min-width: 3em;
+      }
+
       @media (max-width: 500px) {
         canvas {
           width: 90%;
@@ -45,32 +59,21 @@
   </head>
   <body>
     <h1><a href="https://github.com/SX-9/draw-network">Draw Network</a></h1>
-    <p>Your Color: <span id="color">Loading...</span></p>
+    <div>
+      <input type="color" title="Color" />
+      <button id="clear">Clear</button>
+      <button id="save">Download</button>
+    </div>
     <canvas width="500" height="500"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const colors = [
-        "pink",
-        "magenta",
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "lime",
-        "cyan",
-        "blue",
-        "purple",
-        "black",
-      ];
-
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const color = document.querySelector("input[type=color]");
       const canvas = document.querySelector("canvas");
       const ctx = canvas.getContext("2d");
       const socket = io("/");
 
-      document.querySelector("#color").innerText = '###';
-      document.querySelector("#color").style.backgroundColor = color;
-      document.querySelector("#color").style.color = color;
+      document.querySelector("button#clear").onclick = () => ctx.clearRect(0, 0, canvas.width, canvas.height);;
+      document.querySelector("button#save").onclick = () => window.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
       let isDrag = 0;
       document.onmousedown = () => isDrag++;
@@ -85,8 +88,8 @@
           if (!isDrag) return;
           let cords = pos(canvas, e);
 
-          socket.emit("draw", { cords, color });
-          draw({ cords, color });
+          socket.emit("draw", { cords, color: color.value });
+          draw({ cords, color: color.value });
         },
         false
       );
@@ -97,8 +100,8 @@
           Array.from(e.touches).forEach((t) => {
             let cords = pos(canvas, t);
 
-            socket.emit("draw", { cords, color });
-            draw({ cords, color });
+            socket.emit("draw", { cords, color: color.value });
+            draw({ cords, color: color.value });
           });
         },
         false
